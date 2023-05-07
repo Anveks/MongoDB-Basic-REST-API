@@ -1,4 +1,3 @@
-import { error } from "console";
 import { ResourceNotFoundError, ValidationError } from "../2-models/client-errors";
 import { IProductModel, ProductModel } from "../2-models/product-model";
 

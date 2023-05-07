@@ -12,5 +12,5 @@ async function connect(): Promise<void>{
 } 
 
 export default {
-  connect,
+  connect
 }
