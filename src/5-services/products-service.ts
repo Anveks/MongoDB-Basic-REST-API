@@ -3,8 +3,11 @@ import { IProductModel, ProductModel } from "../2-models/product-model";
 
 // Get all products from database: 
 async function getAllProducts(): Promise<IProductModel[]> {
-  const products = await ProductModel.find().exec();
-  return products;
+  // default: get all products without vitual category:
+  // const products = await ProductModel.find().exec();
+  // return products;
+
+  return ProductModel.find().populate("category").exec(); // category is the virtual field that we've defined
 }
 
 // Get one product
@@ -39,13 +42,24 @@ async function deleteProduct(_id: string): Promise<void> {
 
 async function getSomeProducts(): Promise<IProductModel[]>{
   // return ProductModel.find(filter, projection, options).exec();
-  return ProductModel.find({name: { $regex: /^ch.*$/i }}, {_id: false, name: true, price: true}, {sort: { price: -1 }}).exec();
-
   // filter = where
   // projection = select
   // oprions = other manipulations
 
-  // /^Ch.*$/i ---> i here is a flag meaning it wond be case sensitive
+  // get only products starting with "ch"
+  // return ProductModel.find(
+  //   {name: { $regex: /^ch.*$/i }}, // /^Ch.*$/i ---> i here is a flag meaning it wond be case sensitive
+  //   {_id: false, name: true, price: true}, 
+  //   {sort: { price: -1 }})
+  //   .exec();
+
+  // return only beverages:
+  return ProductModel.find(
+    {categoryId: "5e91e29b9c08fc560ce2cf32"}, 
+    {_id: false, name: true, price: true, categoryId: true}, 
+    {sort: { price: 1 }})
+    .populate("category")
+    .exec();
 }
 
 export default {
